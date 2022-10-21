@@ -199,7 +199,7 @@ prefixing the value with `{type}:`. The following types are available:
 | `PUBLIC_URL`<sup>[1]</sup> | URL where your API can be reached on the web.                                                              | `/`           |
 | `LOG_LEVEL`                | What level of detail to log. One of `fatal`, `error`, `warn`, `info`, `debug`, `trace` or `silent`.        | `info`        |
 | `LOG_STYLE`                | Render the logs human readable (pretty) or as JSON. One of `pretty`, `raw`.                                | `pretty`      |
-| `MAX_PAYLOAD_SIZE`         | Controls the maximum request body size. Accepts number of bytes, or human readable string.                 | `1mb`       |
+| `MAX_PAYLOAD_SIZE`         | Controls the maximum request body size. Accepts number of bytes, or human readable string.                 | `1mb`         |
 | `ROOT_REDIRECT`            | Where to redirect to when navigating to `/`. Accepts a relative path, absolute URL, or `false` to disable. | `./admin`     |
 | `SERVE_APP`                | Whether or not to serve the Admin App under `/admin`.                                                      | `true`        |
 | `GRAPHQL_INTROSPECTION`    | Whether or not to enable GraphQL Introspection                                                             | `true`        |
@@ -369,13 +369,13 @@ No additional configuration required.
 
 Alternatively, you can provide the individual connection parameters:
 
-| Variable                      | Description                      									| Default Value |
-| ----------------------------- | ----------------------------------------------------------------- | ------------- |
-| `RATE_LIMITER_REDIS_HOST`     | Hostname of the Redis instance, e.g., `"127.0.0.1"`   			| --            |
-| `RATE_LIMITER_REDIS_PORT`     | Port of the Redis instance, e.g., `6379`       					| --            |
-| `RATE_LIMITER_REDIS_USERNAME` | Username for your Redis instance, e.g., `"default"` 			 	| --            |
-| `RATE_LIMITER_REDIS_PASSWORD` | Password for your Redis instance, e.g., `"yourRedisPassword"` 	| --            |
-| `RATE_LIMITER_REDIS_DB` 		| Database of your Redis instance to connect, e.g., `1` 			| --            |
+| Variable                      | Description                                                   | Default Value |
+| ----------------------------- | ------------------------------------------------------------- | ------------- |
+| `RATE_LIMITER_REDIS_HOST`     | Hostname of the Redis instance, e.g., `"127.0.0.1"`           | --            |
+| `RATE_LIMITER_REDIS_PORT`     | Port of the Redis instance, e.g., `6379`                      | --            |
+| `RATE_LIMITER_REDIS_USERNAME` | Username for your Redis instance, e.g., `"default"`           | --            |
+| `RATE_LIMITER_REDIS_PASSWORD` | Password for your Redis instance, e.g., `"yourRedisPassword"` | --            |
+| `RATE_LIMITER_REDIS_DB`       | Database of your Redis instance to connect, e.g., `1`         | --            |
 
 ### Memcache
 
@@ -487,13 +487,13 @@ No additional configuration required.
 
 Alternatively, you can provide the individual connection parameters:
 
-| Variable                      | Description                      							| Default Value |
-| ----------------------------- | --------------------------------------------------------- | ------------- |
-| `CACHE_REDIS_HOST`     | Hostname of the Redis instance, e.g., `"127.0.0.1"`   			| --            |
-| `CACHE_REDIS_PORT`     | Port of the Redis instance, e.g., `6379`       					| --            |
-| `CACHE_REDIS_USERNAME` | Username for your Redis instance, e.g., `"default"` 			 	| --            |
-| `CACHE_REDIS_PASSWORD` | Password for your Redis instance, e.g., `"yourRedisPassword"` 	| --            |
-| `CACHE_REDIS_DB` 		| Database of your Redis instance to connect, e.g., `1` 			| --            |
+| Variable               | Description                                                   | Default Value |
+| ---------------------- | ------------------------------------------------------------- | ------------- |
+| `CACHE_REDIS_HOST`     | Hostname of the Redis instance, e.g., `"127.0.0.1"`           | --            |
+| `CACHE_REDIS_PORT`     | Port of the Redis instance, e.g., `6379`                      | --            |
+| `CACHE_REDIS_USERNAME` | Username for your Redis instance, e.g., `"default"`           | --            |
+| `CACHE_REDIS_PASSWORD` | Password for your Redis instance, e.g., `"yourRedisPassword"` | --            |
+| `CACHE_REDIS_DB`       | Database of your Redis instance to connect, e.g., `1`         | --            |
 
 ### Memcache
 
@@ -561,15 +561,15 @@ Based on your configured driver, you must also provide the following configurati
 
 ### S3 (`s3`)
 
-| Variable                      							| Description 							| Default Value      |
-| ------------------------------------------- | -------------------------	| ------------------ |
-| `STORAGE_<LOCATION>_KEY`      							| User key    							| --                 |
-| `STORAGE_<LOCATION>_SECRET`   							| User secret 							| --                 |
-| `STORAGE_<LOCATION>_BUCKET`   							| S3 Bucket   							| --                 |
-| `STORAGE_<LOCATION>_REGION`   							| S3 Region   							| --                 |
-| `STORAGE_<LOCATION>_ENDPOINT` 							| S3 Endpoint 							| `s3.amazonaws.com` |
-| `STORAGE_<LOCATION>_ACL`      							| S3 ACL      							| --                 |
-| `STORAGE_<LOCATION>_SERVER_SIDE_ENCRYPTION`	| S3 Server Side Encryption	| --                 |
+| Variable                                    | Description               | Default Value      |
+| ------------------------------------------- | ------------------------- | ------------------ |
+| `STORAGE_<LOCATION>_KEY`                    | User key                  | --                 |
+| `STORAGE_<LOCATION>_SECRET`                 | User secret               | --                 |
+| `STORAGE_<LOCATION>_BUCKET`                 | S3 Bucket                 | --                 |
+| `STORAGE_<LOCATION>_REGION`                 | S3 Region                 | --                 |
+| `STORAGE_<LOCATION>_ENDPOINT`               | S3 Endpoint               | `s3.amazonaws.com` |
+| `STORAGE_<LOCATION>_ACL`                    | S3 ACL                    | --                 |
+| `STORAGE_<LOCATION>_SERVER_SIDE_ENCRYPTION` | S3 Server Side Encryption | --                 |
 
 ### Azure (`azure`)
 
@@ -800,6 +800,13 @@ AUTH_FACEBOOK_PROFILE_URL="https://graph.facebook.com/me?fields=email"
 AUTH_FACEBOOK_ICON="facebook"
 AUTH_FACEBOOK_LABEL="Facebook"
 ```
+
+## Flows
+
+| Variable                     | Description                                      | Default Value |
+| ---------------------------- | ------------------------------------------------ | ------------- |
+| `FLOWS_EXEC_ALLOWED_MODULES` | A comma-separated list of node modules.          | `false`       |
+| `FLOWS_EXEC_ALLOWED_ENV`     | A comma-separated list of environment variables. | `false`       |
 
 ## Extensions
 
