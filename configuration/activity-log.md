@@ -79,8 +79,8 @@ can also filter items by activity from the Navigation Bar.
 </video>
 
 To ensure proper accountability, system collections are **read only** by design. However, users with an Admin role have
-the ability to reopen, view, and modify an item's values in activities from non-system collections _(where the name does
-not begin with `directus_`)_. To view or modify an activity, follow these steps.
+the ability to reopen, view, and modify an item's values in activities from non-system collections (where the name does
+not begin with `directus_`). To view or modify an activity, follow these steps.
 
 1. Navigate to the Activity Log page.
 2. Click the desired item. A drawer will open, displaying its activity log.

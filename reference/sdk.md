@@ -426,7 +426,13 @@ one.
 
 ::: tip
 
-The axios instance can be used for custom requests by calling `await directus.transport.<method>('/path/to/endpoint', { /* body, params, ... */ })`
+The axios instance can be used for custom requests by calling:
+
+```ts
+await directus.transport.<method>('/path/to/endpoint', {
+	/* body, params, ... */
+	})
+```
 
 :::
 

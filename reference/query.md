@@ -175,8 +175,9 @@ query {
 
 ::: tip Filtering M2A fields
 
-Because attribute names in GraphQL cannot contain the `:` character, you will need to replace it with a double underscore.
-For example, instead of using `sections.item:heading` in your filter, you will need to use `sections.item__heading` (see the full example below).
+Because attribute names in GraphQL cannot contain the `:` character, you will need to replace it with a double
+underscore. For example, instead of using `sections.item:heading` in your filter, you will need to use
+`sections.item__heading` (see the full example below).
 
 ```graphql
 query {
