@@ -808,6 +808,22 @@ AUTH_FACEBOOK_LABEL="Facebook"
 | `FLOWS_EXEC_ALLOWED_MODULES` | A comma-separated list of node modules.          | `false`       |
 | `FLOWS_EXEC_ALLOWED_ENV`     | A comma-separated list of environment variables. | `false`       |
 
+::: tip Usage in Flows Run Script Operation
+
+Allowed modules can be accessed using `require()`.
+
+```js
+const axios = require('axios').default;
+```
+
+Allowed environment variables can be accessed through `process.env`.
+
+```js
+const publicUrl = process.env.PUBLIC_URL;
+```
+
+:::
+
 ## Extensions
 
 | Variable                 | Description                                             | Default Value  |
