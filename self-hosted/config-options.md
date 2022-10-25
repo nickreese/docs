@@ -813,7 +813,7 @@ AUTH_FACEBOOK_LABEL="Facebook"
 Allowed modules can be accessed using `require()`.
 
 ```js
-const axios = require('axios').default;
+const axios = require('axios');
 ```
 
 Allowed environment variables can be accessed through `process.env`.
