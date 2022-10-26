@@ -816,9 +816,11 @@ Allowed modules can be accessed using `require()`.
 const axios = require('axios');
 ```
 
-Allowed environment variables can be accessed through `process.env`.
+Allowed environment variables can be accessed through `$env` or `process.env`.
 
 ```js
+const publicUrl = $env.PUBLIC_URL;
+// OR
 const publicUrl = process.env.PUBLIC_URL;
 ```
 
