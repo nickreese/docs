@@ -223,7 +223,7 @@ The following is a highly generic example of a data chain.
 	},
 	"$env": {
 		// Environment variables allowed in `FLOWS_EXEC_ALLOWED_ENV`.
-		// Configure the allowed environment variables under [flows](/self-hosted/config-options#flows).
+		// This could include PUBLIC_URL, PORT, etc...
 		// Every data chain has an $env key.
 	},
 	"$last": {
