@@ -203,9 +203,9 @@ Now that we know how to create and configure a flow, it's time to get a firmer u
 
 Remember, each flow creates its own JSON object to store any data generated.
 
-When the flow begins, three keys are appended to the data chain: `$trigger`, `$accountability`, and `$last`. Then, as
-each operation runs, it has access to this data chain. Once an operation finishes, its data is appended under its
-`<operationKey>`. When the operation doesn't generate data, `null` is appended under its key.
+When the flow begins, four keys are appended to the data chain: `$trigger`, `$accountability`, `$env`, and `$last`.
+Then, as each operation runs, it has access to this data chain. Once an operation finishes, its data is appended under
+its `<operationKey>`. When the operation doesn't generate data, `null` is appended under its key.
 
 The following is a highly generic example of a data chain.
 
@@ -220,6 +220,11 @@ The following is a highly generic example of a data chain.
 		// Provides details on who/what started the flow.
 		// This could include user's id, role, ip address, etc...
 		// Every data chain has an $accountability key.
+	},
+	"$env": {
+		// Environment variables allowed in `FLOWS_EXEC_ALLOWED_ENV`.
+		// Configure the allowed environment variables under [flows](/self-hosted/config-options#flows).
+		// Every data chain has an $env key.
 	},
 	"$last": {
 		// The value appended under $last changes after each operation.
