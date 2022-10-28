@@ -10,7 +10,7 @@ pageClass: page-reference
 
 ---
 
-## The Flow Object
+## The Data Chain
 
 `id` **uuid**\
 Primary key of the flow.
@@ -76,7 +76,7 @@ Supports all [global query parameters](/reference/query).
 
 ### Returns
 
-An array of up to [limit](/reference/query#limit) [flow objects](#the-flow-object). If no items are available, data will
+An array of up to [limit](/reference/query#limit) [data chains](#the-data-chain). If no items are available, data will
 be an empty array.
 
 ### REST API
@@ -124,7 +124,7 @@ Supports all [global query parameters](/reference/query).
 
 ### Returns
 
-Returns the requested [flow object](#the-flow-object).
+Returns the requested [data chain](#the-data-chain).
 
 ### REST API
 
@@ -174,11 +174,11 @@ Supports all [global query parameters](/reference/query).
 
 ### Request Body
 
-A partial [flow object](#the-flow-object).
+A partial [data chain](#the-data-chain).
 
 ### Returns
 
-Returns the [flow object](#the-flow-object) for the created flow.
+Returns the [data chain](#the-data-chain) for the created flow.
 
 ### REST API
 
@@ -234,11 +234,11 @@ Supports all [global query parameters](/reference/query).
 
 ### Request Body
 
-An array of partial [flow objects](#the-flow-object).
+An array of partial [data chains](#the-data-chain).
 
 ### Returns
 
-Returns the [flow object](#the-flow-object) for the created flow.
+Returns the [data chain](#the-data-chain) for the created flow.
 
 ### REST API
 
@@ -314,11 +314,11 @@ Supports all [global query parameters](/reference/query).
 
 ### Request Body
 
-A partial [flow object](#the-flow-object).
+A partial [data chain](#the-data-chain).
 
 ### Returns
 
-Returns the [flow object](#the-flow-object) for the updated flow.
+Returns the [data chain](#the-data-chain) for the updated flow.
 
 ### REST API
 
@@ -375,11 +375,11 @@ Supports all [global query parameters](/reference/query).
 Array of primary keys of the flows you'd like to update.
 
 `data` **Required**\
-Any of [the flow object](#the-flow-object)'s properties.
+Any of [the data chain](#the-data-chain)'s properties.
 
 ### Returns
 
-Returns the [flow objects](#the-flow-object) for the updated flows.
+Returns the [data chains](#the-data-chain) for the updated flows.
 
 ### REST API
 

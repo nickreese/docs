@@ -1,20 +1,22 @@
 ---
 description:
-  When a Flow is triggered, it executes its chain of Operations, enabling you to do things like manage data within
-  Directus, transform the Flow's data, send information off to outside services, set conditional logic, trigger other
-  Flows, and beyond!
+  Operations are the individual actions in a flow. They enable you to do things like manage data within Directus,
+  transform the flow's data, send information off to outside services, set conditional logic, trigger other flows, and
+  beyond!
 readTime: 5 min read
 ---
 
 # Operations
 
-> When a Flow is triggered, it executes its chain of Operations, enabling you to do things like manage data within
-> Directus, transform the Flow's data, send information off to outside services, set conditional logic, trigger other
-> Flows, _and beyond!_
+> Operations are the individual actions in a flow. They enable you to do things like manage data within Directus,
+> transform the flow's data, send information off to outside services, set conditional logic, trigger other flows, _and
+> beyond!_
 
 :::tip Before You Begin
 
-Please be sure to read the documentation on [Flows](/configuration/flows) and [Triggers](/configuration/flows/triggers).
+On this page, we'll explain what each operation does, the value it appends to the data chain, how to make use of its
+configuration options, as well as any well as other relevant details. We will assume you have read the documentation on
+[Flows](/configuration/flows) and [Triggers](/configuration/flows/triggers).
 
 :::
 
@@ -22,27 +24,133 @@ Please be sure to read the documentation on [Flows](/configuration/flows) and [T
 
 ![Condition](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/condition-20220603A.webp)
 
-A Condition routes to the next success or failure Operation based on some conditional `if` / `else` logic defined by a
-Filter query. That means if the query condition is met, the Flow will move forward with the success Operation.
-Otherwise, the failure Operation will initiate.
+A **Condition** operation lets you choose a **success path** or **failure path** by validating data passed into it with
+[Filter Rules](/reference/filter-rules).
+
+**Options**
 
 - **Condition Rules** — Create conditions with [Filter Rules](/reference/filter-rules).
+
+**Payload**
+
+This operation does not generate data. If the filter rule is configured properly, it will append a `null` value on its
+`operationKey`, regardless of if the condition was met or not. However, if the filter rule is misconfigured, it will
+append an array containing an object you can use to help debug the misconfiguration.
+
+**More Details**
+
+:::warning
+
+When using an [Event Hook](/configuration/flows/triggers.md#event-hook) configured to be **Action (Blocking)**, if your
+flow ends with a condition that executes with a `reject` path, it will cancel your database transaction.
+
+:::
+
+## Run Script
+
+<!--
+<video autoplay playsinline muted loop controls title="Run Script">
+	<source src="" type="video/mp4" />
+</video>
+-->
+
+This operation lets you add a custom script using vanilla JavaScript or TypeScript.
+
+**Options**
+
+The operation provides a default function template. The _optional_ `data` parameter lets you pass in the data chain as
+an argument.
+
+**Payload**
+
+The function's `return` value will be appended under its `<operationKey>`.
+
+**More Details**
+
+As an example, let's say you have this function in a script operation, named `myScript`.
+
+```JSON
+// A key from the data chain
+{
+  "previousOperation": {
+    "value": 5
+  }
+}
+```
+
+Then you add the following logic via Run Script.
+
+```TypeScript
+// Your function in the myScript operation
+module.exports = function(data) {
+  return {
+    timesTwo: data.previousOperation.value * 2
+  }
+}
+
+```
+
+The returned value will be appended under the `myScript` operation key.
+
+```JSON
+{
+  "previousOperation": {
+    "value": 5
+  },
+  "myScript": {
+    "timesTwo": 10
+  }
+}
+
+```
+
+:::tip
+
+Make sure your `return` value is valid JSON.
+
+:::
+
+:::tip Throwing Errors
+
+If you throw an error in a **Run Script** operation, it will immediately break your flow chain and stop execution of
+subsequent flows. If you used a ["Blocking" Event hook](/configuration/flows/triggers.md#event-hook), throwing an error
+will cancel the original event transaction to the database.
+
+:::
 
 ## Create Data
 
 ![Create Data](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/create-data-20220603A.webp)
 
-This Operation creates Item(s) in a Collection.
+This operation creates item(s) in a collection.
 
-- **Collection** — Use the dropdown menu to select the Collection you'd like to create Items in.
-- **Permissions** — Select the scope of permissions used for this Operation.
+**Options**
+
+- **Collection** — Select the collection you'd like to create items in.
+- **Permissions** — Select the scope of permissions used for this operation.
 - **Emit Events** — Toggle whether the event is emitted.
-- **Payload** — Create Item(s) in a Collection. To learn more, see [API > Items](/reference/items).
+- **Payload** — Defines the payload to create item(s) in a collection.
+
+**Payload**
+
+An array with the ID(s) of all items created will be appended under its `<operationKey>`.
+
+**More Details**
+
+:::warning
+
+**Emit Events** toggles the event's _visibility_ throughout Directus. For example, if togged on, this operation will
+trigger relevant event hooks in other flows or custom extensions. If toggled off, the operation will not trigger other
+event hooks. Imagine a situation where you have a flow being triggered by `<collection>.items.create` which contains an
+operation that then tries to create another item in that `<collection>`. This would throw an infinite loop where the
+operation triggers its own flow, endlessly. However, if you toggle **Emit Events** off, then this operation no longer
+triggers other event hooks.
+
+:::
 
 :::tip
 
-Make sure the Operation is scoped with the [permissions](/configuration/users-roles-permissions) necessary to create
-Items.
+To learn about payload requirements when creating an item, see [API Reference > Items](/reference/items).
 
 :::
 
@@ -50,17 +158,30 @@ Items.
 
 ![Delete Data](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/delete-data-20220603A.webp)
 
-This Operation deletes Item(s) from a Collection by ID or query.
+This operation deletes item(s) from a collection.
 
-- **Permissions** — Set the scope of permissions used for this Operation.
-- **Collection** — Use the dropdown menu to select the Collection you'd like to delete Items from.
+**Options**
+
+- **Collection** — Select the collection you'd like to delete items from.
+- **Permissions** — Set the scope of permissions used for this operation.
+- **Emit Events** — Toggle whether the event is emitted.
 - **IDs** — Set Item IDs and press enter to confirm. Click the ID to remove.
-- **Query** — Select Items to delete with a query. To learn more, see [Filter Rules](/reference/filter-rules).
+- **Query** — Select items to delete with a query. To learn more, see [Filter Rules](/reference/filter-rules).
 
-:::tip
+**Payload**
 
-Make sure the Operation is scoped with the [permissions](/configuration/users-roles-permissions) necessary to delete
-Items.
+An array with the ID(s) of all items deleted will be appended under its `<operationKey>`.
+
+**More Details**
+
+:::warning
+
+**Emit Events** toggles the event's _visibility_ throughout Directus. For example, if togged on, this operation will
+trigger relevant event hooks in other flows or custom extensions. If toggled off, the operation will not trigger other
+event hooks. Imagine a situation where you have a flow being triggered by `<collection>.items.delete` which contains an
+operation that then tries to delete another item in that `<collection>`. This would throw an infinite loop where the
+operation triggers its own flow, endlessly. However, if you toggle **Emit Events** off, then this operation no longer
+triggers other event hooks.
 
 :::
 
@@ -68,51 +189,122 @@ Items.
 
 ![Read Data](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/read-data-20220603A.webp)
 
-This Operation reads Item(s) from a Collection and adds them onto the Flow Object. You may select Items by their ID or
-run a query to select the Items you wish to update.
+This operation reads item(s) from a collection and adds them onto the data chain. You may select Items by their ID or by
+running a query.
 
-- **Permissions** — Set the scope of permissions used for this Operation.
-- **Collections** — Select the Collection from which you'd like to read Items.
-- **IDs** — Input the ID for Items you wish to read and press enter. Click the ID to remove.
-- **Query** — Select the Items with a query. To learn more, see [Filter Rules](/reference/filter-rules).
+**Options**
+
+- **Permissions** — Set the scope of permissions used for this operation.
+- **Collections** — Select the collection you'd like to read items from.
+- **IDs** — Input the ID for items you wish to read and press enter. Click the ID to remove.
+- **Query** — Select the items with a query. To learn more, see [Filter Rules](/reference/filter-rules).
+- **Emit Events** — Toggle whether the event is emitted.
+
+**Payload**
+
+An array containing all items read will be appended under its `<operationKey>`.
+
+**More Details**
+
+:::warning
+
+**Emit Events** toggles the event's _visibility_ throughout Directus. For example, if togged on, this operation will
+trigger relevant event hooks in other flows or custom extensions. If toggled off, the operation will not trigger other
+event hooks. Imagine a situation where you have a flow being triggered by `<collection>.items.read` which contains an
+operation that then tries to read another item in that `<collection>`. This would throw an infinite loop where the
+operation triggers its own flow, endlessly. However, if you toggle **Emit Events** off, then this operation no longer
+triggers other event hooks.
+
+:::
 
 ## Update Data
 
 ![Update Data](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/update-data-20220603A.webp)
 
-This Operation updates Item(s) in a Collection. Similar to Read Data, you may select Items by their ID or run a query to
-select the Items you wish to update.
+This operation updates item(s) in a collection. You may select item(s) to update by their ID or by running a query.
 
-- **Permissions** — Set the Role that this Operation will inherit permissions from.
-- **Collections** — Select the Collection from which you'd like to read Items.
+**Options**
+
+- **Collection** — Select the collection on which you'd like to update items in.
+- **Permissions** — Set the role that this operation will inherit permissions from.
+- **Emit Events** — Toggle whether the event is emitted.
 - **IDs** — Input the ID for Item(s) you wish to read and press enter. Click the ID to remove.
-- **Payload** — Update Items in a Collection. To learn more, see [API > Items](/reference/items).
-- **Query** — Select Items to update with a query. To learn more, see [Filter Rules](/reference/filter-rules).
+- **Payload** — Update Items in a collection. To learn more, see [API > Items](/reference/items).
+- **Query** — Select items to update with a query. To learn more, see [Filter Rules](/reference/filter-rules).
+
+**Payload**
+
+An array containing all items updated will be appended under its `<operationKey>`.
+
+**More Details**
+
+:::warning
+
+**Emit Events** toggles the event's _visibility_ throughout Directus. For example, if togged on, this operation will
+trigger relevant event hooks in other flows or custom extensions. If toggled off, the operation will not trigger other
+event hooks. Imagine a situation where you have a flow being triggered by `<collection>.items.update` which contains an
+operation that then tries to update another item in that `<collection>`. This would throw an infinite loop where the
+operation triggers its own flow, endlessly updating items. However, if you toggle **Emit Events** off, then this
+operation no longer triggers other event hooks.
+
+:::
+
+:::tip
+
+To learn about `payload` requirements when updating an item, see [API Reference > Items](/reference/items).
+
+:::
 
 ## Log to Console
 
 ![Log to Console](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/log-to-console-20220603A.webp)
 
-This Operation outputs something to the server-side console as well as the [Log Panel](/configuration/flows#logs). This
-is a key tool for troubleshooting Flow configuration.
+This operation outputs information to the server-side console as well as the [Logs](/configuration/flows#logs) within
+the Data Studio. This is a key tool for troubleshooting flow configuration. A Log operation's key will have a null value
+on the data chain.
+
+**Options**
 
 - **Message** — Sets a [log message](/configuration/flows#logs).
+
+**Payload**
+
+This operation does not generate data for the data chain as its messages are for debugging and troubleshooting. It will
+append a `null` value on the `operationKey`.
+
+**More Details**
+
+For more details, see the section on [Logs](/configuration/flows#logs).
 
 ## Send Email
 
 ![Send Email](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/send-email-20220603A.webp)
 
-This Operation sends an email. Flow Object keys can be used as variables, which means you can use an array of emails
-from a previous step in Flows.
+This operation sends off emails.
 
-- **To** — Set the email addresses. Hit `↵` to save the email. Click an email to remove it.
+**Options**
+
+- **To** — Sets the email addresses. Hit `↵` `Enter` (PC) or `return` (Mac) to save the email. Click on a pill to remove
+  it.
 - **Subject** — Set the subject line.
-- **Body** — Use a WYSIWYG editor to create the email body.
+- **Body** — Use a Markdown or WYSIWYG editor to create the email body.
+
+**Payload**
+
+This operation does not generate data for the data chain. It will append a `null` value on the `operationKey`.
+
+**More Details**
+
+:::tip Batch Emails
+
+You can input an array of emails in the `To` input option to send off multiple emails.
+
+:::
 
 :::tip
 
-If you are testing out this Operation locally from `localhost:8080`, be sure to check your spam box, as your email
-provider may send it there automatically.
+If you are testing out this operation from `localhost:8080`, be sure to check your spam box, because your email provider
+may send it there automatically.
 
 :::
 
@@ -120,51 +312,115 @@ provider may send it there automatically.
 
 ![Send Notification](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/send-notification-20220603A.webp)
 
-This Operation sends a notification to an app user.
+This operation pushes notifications to Directus Users. If the operation executes successfully, a list containing the IDs
+of all sent notifications generated is appended under this operation's key.
 
-- **Users** — Define a User by their primary key UUID. Use [Flow keys](/configuration/flows#the-flow-object) to set this
-  dynamically.
-- **Permissions** — Define the Role that this Operation will inherit permissions from.
-- **Title** — Set the notification title.
+**Options**
+
+- **Users** — Define a user by their UUID. Hit `↵` `Enter` (PC) or `return` (Mac) to save it. Click on a pill to remove
+  it.
+- **Permissions** — Define the role that this operation will inherit permissions from.
+- **Title** — Set the title of the notification.
 - **Message** — Set the main body of the notification.
+
+**Payload**
+
+This operation does not generate data. It will append a `null` value on its `operationKey`.
+
+**More Details**
+
+:::tip Batch Notifications
+
+You can input an array of UUIDs in the `To` input option to send off multiple emails.
+
+:::
 
 ## Webhook / Request URL
 
 ![Webhook / Request URL](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/webhook-20220603A.webp)
 
-This Operation makes a request to another URL.
+This operation makes a request to another URL.
+
+**Options**
 
 - **Method** — Choose to make a GET, POST, PATCH, DELETE, or other type of request.
 - **URL** — Define the URL to send the request to.
 - **Headers** — Create a new `header:value` to pass along with the request.
-- **Request Body** — Set the request body data, using any string or JSON.
+- **Request Body** — Set the request body's data.
+
+**Payload**
+
+When an operation completes successfully, the `response` is appended under its `<operationKey`.
 
 ## Sleep
 
 ![Sleep](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/sleep-20220603A.webp)
 
-This Operation pauses Operation Execution on the Flow for a given amount of milliseconds, then continues to the next
-Operation.
+This operation creates a delay in the Flow for a given amount of milliseconds, then continues to the next operation.
 
-- **Milliseconds** — Define the number of milliseconds the Operation will pause.
+**Options**
+
+- **Milliseconds** — Define the number of milliseconds to sleep.
+
+**Payload**
+
+This operation does not generate data. It will append a `null` value on its `operationKey`.
 
 ## Transform Payload
 
 ![Transform Payload](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/transform-payload-20220603A.webp)
 
-Transform Payload simply creates a new key on the Flow Object with nested JSON data to provide a clean space where you
-can combine data from multiple [Flow keys](/configuration/flows#the-flow-object) into a single object. For example, if
-you need to use the same data multiple times _(e.g. send it in a web request and also use it to create an Item in a
-Collection)_, you can combine the data with Transform Payload once, then access its Operation key repeatedly.
+This operation lets you custom define your own JSON payload for use in subsequent operations. This enables you to take
+multiple sources of data and "tidy them up" into a single payload.
 
-- **JSON** — Define JSON to insert into the Flow Object.
+**Options**
+
+- **JSON** — Define JSON to insert into the data chain.
+
+**Payload**
+
+When an operation completes successfully, the value you defined under the **JSON** configuration operation is appended
+onto its `operationKey`.
+
+**More Details**
+
+When does the Transform Payload operation come in handy? Let's say you need to create a payload with data from a
+`users_collection`, `widgets_collection` and some 3rd party resource which processes the data. You can add a
+[Read Data](#read-data) operation for `collection_a`, another Read Data operation for `collection_b`, and a
+[Webhook](#webhook--request-url) operation for the third party resource.
+
+Then you could stitch together all this data to create a new JSON object, like so:
+
+```
+{
+	"note": "You can add a hard-coded value!",
+	"name": "{{users_collection.username}}",
+	"widget_id": "{{widgets_collection.id}}",
+	"results": "{{webhookKey.subnestedValue}}"
+}
+```
 
 ## Trigger Flow
 
 ![Trigger Flow](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/trigger-flow-20220603A.webp)
 
-This Operation starts another Flow and passes data to it. It should be used in combination with the
-[Another Flow](/configuration/flows/triggers#another-flow) Trigger.
+This operation starts another flow and _(optionally)_ passes data into it. It should be used in combination with the
+[Another Flow](/configuration/flows/triggers#another-flow) trigger.
 
-- **Flow** — Define a Flow by its primary key UUID.
-- **Payload** — Define JSON to insert into the Flow Object.
+**Options**
+
+- **Flow** — Define a flow by its primary key UUID.
+- **Payload** — Defines a JSON `payload` to pass into `$trigger` on the flow it triggered.
+
+**Payload**
+
+If you've configured a **Response Body** in the trigger of the other flow, this will be appended under this
+`operationKey`. If no **Response Body** is configured, `null` is appended under this `operationKey`.
+
+**More Details**
+
+:::tip Flows for-loops
+
+If you pass an array to the other flow, the other flow will run once for each item in the array.
+
+:::

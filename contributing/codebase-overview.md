@@ -81,6 +81,10 @@ from now, fetching a single item, etc.
 
 Custom Vue directives (e.g. `v-tooltip`).
 
+#### `/app/src/displays`
+
+Components to display of data within the app.
+
 #### `/app/src/interfaces`
 
 The core-included interfaces.

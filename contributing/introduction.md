@@ -75,9 +75,9 @@ edge-case and should be implemented as an extension.
 ## RFCs
 
 Some Directus features/fixes may require additional design, strategy, and/or discussion before beginning work. For these
-notable pull-requests, you should first submit an RFC (Request For Comments) to our core team via
-[Discord](https://directus.chat). This process is relatively informal, but ensures proper alignment, and helps avoid
-squandered development time by contributors.
+notable pull-requests, you should first submit an RFC (Request For Comments) to our core team in a
+[GitHub Discussion](https://github.com/directus/directus/discussions). This process is relatively informal, but ensures
+proper alignment, and helps avoid squandered development time by contributors.
 
 ## Bug Reporting
 

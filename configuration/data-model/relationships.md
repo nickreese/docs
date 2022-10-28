@@ -49,7 +49,7 @@ To create an M2O relationship, we add a foreign key field to the parent collecti
 collection to items in the related collection. If we have two tables, `cities` and `countries`, we can create a
 `cities.country_id` foreign key field.
 
-![Many-to-One Relational Diagram](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relationships-20220805/m2o-20220805A.webp)
+![Many-to-One Relational Diagram](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relations-20221026/m2o-20221026A.webp)
 
 Let's take a look at the schema.
 
@@ -95,7 +95,7 @@ items within an Item Page on the related collection. In Directus, configuring an
 [Alias](/getting-started/glossary#alias) field, which lets us access related items. To demonstrate this, let's continue
 with the `cities` and `countries` example relationship used in the M2O section.
 
-![One-to-Many Relational Diagram](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relationships-20220805/o2m-20220805A.webp)
+![One-to-Many Relational Diagram](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relations-20221026/o2m-20221026A.webp)
 
 Let's take a look at the schema.
 
@@ -148,11 +148,11 @@ of the capital city directly. But this would create [duplicate data](/configurat
 because the same city would exist in both `countries.capital_city` as well as `cities.name`. But remember, we want to
 _avoid duplicate data!_
 
-![Duplicate Data from Capital Cities](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relationships-20220805/o2o-redundant-20220805A.webp)
+![Duplicate Data from Capital Cities](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relations-20221026/o2o-duplicate-20221026A.webp)
 
 Instead, we want to use an O2O relationship. Let's try adding a `cities.capital_of` field.
 
-![An inefficient One-to-One Relationship](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relationships-20220805/o2o-inefficient-20220805A.webp)
+![An inefficient One-to-One Relationship](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relations-20221026/o2o-inefficient-20221026A.webp)
 
 Let's take a look at the schema.
 
@@ -176,7 +176,7 @@ O2O onto. But in this case it is sub-optimal. Since _most cities_ are not capita
 `NULL` values. However, every single country has a capital city. So if we create the O2O on the `countries` collection,
 it will be much more efficient.
 
-![An efficient One-to-One Relationship](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relationships-20220805/o2o-20220805A.webp)
+![A One-to-One Relationship](https://cdn.directus.io/docs/v9/configuration/data-model/relationships/relations-20221026/o2o-20221026A.webp)
 
 Let's take a look at the schema.
 
@@ -346,9 +346,11 @@ Note the following points from the schema above. When we create an M2A in Direct
 
 :::tip Configure an M2A
 
-<!-- <video title="Configure an M2A Relationship" autoplay playsinline muted loop controls>
+<!--
+<video title="Configure an M2A Relationship" autoplay playsinline muted loop controls>
 	<source src="" type="video/mp4" />
-</video> -->
+</video>
+-->
 
 The easiest way to configure an M2A is to follow the guide on how to
 [create a field (standard)](/configuration/data-model/fields/#create-a-field-standard) and select the **Many to Any**
@@ -410,9 +412,11 @@ Note the following points from the schema above. When we create a Translations O
 
 :::tip Configure a Translations O2M
 
-<!-- <video title="Configure a Translations O2M" autoplay playsinline muted loop controls>
+<!--
+<video title="Configure a Translations O2M" autoplay playsinline muted loop controls>
 	<source src="" type="video/mp4" />
-</video> -->
+</video>
+-->
 
 The easiest way to configure a Translations relationship is to follow the guide on how to
 [create a field (standard)](/configuration/data-model/fields/#create-a-field-standard) and select the **Translations

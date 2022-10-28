@@ -184,11 +184,10 @@ and no long-term commitments._
 
 The following core principles guide this platform:
 
-- **Pure** — No predefined or proprietary schema, with all system metadata stored separately.
-- **Open** — Directus Core is public and open source, with no obfuscated or cloud-only code.
-- **Portable** — The database can be exported or migrated anytime, so there's no vendor lock-in.
-- **Limitless** — No artificial limits or paywalls on users, roles, languages,
-  [Collections](/getting-started/glossary#collections), or [Items](/getting-started/glossary#items).
+- **Pure** — No predefined or proprietary schema. All system metadata is stored separately.
+- **Open** — Directus Core is open source, with no obfuscated or cloud-only code.
+- **Portable** — No vendor lock-in. Your database can be exported or migrated anytime.
+- **Limitless** — No arbitrary limits or paywalls on users, roles, translations, and data.
 - **Extensible** — Every aspect of this platform is modular to avoid any hard feature ceiling.
 - **Unopinionated** — Choose the stack, database, and architecture as you wish.
 

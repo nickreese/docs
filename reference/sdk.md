@@ -431,7 +431,7 @@ The axios instance can be used for custom requests by calling:
 ```ts
 await directus.transport.<method>('/path/to/endpoint', {
 	/* body, params, ... */
-	})
+});
 ```
 
 :::

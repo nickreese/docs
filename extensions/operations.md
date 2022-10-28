@@ -85,7 +85,7 @@ extension.
 The handler function defined inside the API endpoint will be called whenever the flow the operation is connected to is
 executed. To trigger the operation connected to the `resolve` anchor, the handler function has to return a value. To
 trigger the operation connected to the `reject` anchor, the handler function has to throw with a value. This value will
-then be added to the [Flow Object](/configuration/flows#the-flow-object).
+then be added to the [data chain](/configuration/flows#the-data-chain).
 
 The handler function receives the two parameters `options` and `context`. `options` is an object with the operation's
 options as properties and their respective already interpolated values. `context` is an object with the following

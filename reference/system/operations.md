@@ -49,7 +49,7 @@ The operation triggered when the current operation fails (or `otherwise` logic o
 an [operation](#the-operation-object).
 
 `flow` **many-to-one**\
-The flow containing this operation. Many-to-one to [flows](/reference/system/flows#the-flow-object).
+The flow containing this operation. Many-to-one to [flows](/reference/system/flows#the-data-chain).
 
 ```json
 {

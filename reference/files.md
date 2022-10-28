@@ -346,7 +346,7 @@ Upload/create a new file.
 To upload a file, use `multipart/form-data` as the encoding type, instead of JSON.
 
 The file contents has to be provided in a part called `file`. All other properties of
-[the file object](#the-file-object) can be provided as parts as well.
+[the file object](#the-file-object) can be provided as parts as well, except `filename_disk` and `filename_download`.
 
 ::: tip Order Matters
 
