@@ -805,8 +805,8 @@ AUTH_FACEBOOK_LABEL="Facebook"
 
 | Variable                     | Description                                      | Default Value |
 | ---------------------------- | ------------------------------------------------ | ------------- |
+| `FLOWS_ENV_ALLOW_LIST`       | A comma-separated list of environment variables. | `false`       |
 | `FLOWS_EXEC_ALLOWED_MODULES` | A comma-separated list of node modules.          | `false`       |
-| `FLOWS_EXEC_ALLOWED_ENV`     | A comma-separated list of environment variables. | `false`       |
 
 ::: tip Usage in Flows Run Script Operation
 
