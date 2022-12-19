@@ -162,6 +162,12 @@ me.level = 42;
 me.experience = 'high';
 ```
 
+## Advanced Customizations
+
+The previous sections covered basic installation and usage of the SDK. In most cases, it will be all you need for your
+project. But sometimes you may need to extend the default functionality. The next sections help you get started with
+more advanced customizations.
+
 ## Reference
 
 ### Constructor
