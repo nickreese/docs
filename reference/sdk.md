@@ -20,7 +20,7 @@ npm install @directus/sdk
 
 ## Usage
 
-First, instantiate `Directus`.
+First, instantiate `Directus`. After that, you can access it throughout your project.
 
 ```js
 import { Directus } from '@directus/sdk';
