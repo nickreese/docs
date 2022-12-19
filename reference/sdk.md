@@ -10,7 +10,7 @@ readTime: 14 min read
 
 > The JS SDK provides an intuitive interface for the Directus API from within a JavaScript-powered project (browsers and
 > Node.js). The default implementation uses [Axios](https://npmjs.com/axios) for transport and `localStorage` for
-> storing state.
+> storing state. Advanced customizations are available.
 
 ## Installation
 
@@ -20,21 +20,35 @@ npm install @directus/sdk
 
 ## Usage
 
+First, instantiate `Directus`.
+
 ```js
 import { Directus } from '@directus/sdk';
 
 const directus = new Directus('http://directus.example.com');
+```
 
-async function start() {
-	// We don't need to authenticate if data is public
-	const publicData = await directus.items('public').readByQuery({ meta: 'total_count' });
+You can always access data available to [the public role](/configuration/users-roles-permissions.html#directus-roles).
+
+```js
+async function publicData() {
+	// We don't need to authenticate if the public role has access.
+	const publicData = await directus.items('some_public_collection').readByQuery({ meta: 'total_count' });
 
 	console.log({
 		items: publicData.data,
 		total: publicData.meta.total_count,
 	});
+}
+```
 
-	// But, we need to authenticate if data is private
+If data access is restricted to [a specific role](/configuration/users-roles-permissions.html#directus-roles), you must
+be [authenticated](/reference/authentication.md) to access it.
+
+```js
+async function start() {
+	// AUTHENTICATION
+
 	let authenticated = false;
 
 	// Try to authenticate with token if exists
@@ -60,8 +74,10 @@ async function start() {
 			});
 	}
 
-	// After authentication, we can fetch the private data in case the user has access to it
-	const privateData = await directus.items('privateData').readByQuery({ meta: 'total_count' });
+	// GET DATA
+
+	// After authentication, we can fetch data that the user has access to.
+	const privateData = await directus.items('some_private_collection').readByQuery({ meta: 'total_count' });
 
 	console.log({
 		items: privateData.data,
