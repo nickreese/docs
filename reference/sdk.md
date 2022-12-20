@@ -168,13 +168,11 @@ The previous sections covered basic installation and usage of the SDK. In most c
 project. But sometimes you may need to extend the default functionality. The next sections help you get started with
 more advanced customizations.
 
-## Reference
+## Custom SDK Config
 
 ### Constructor
 
-This is the starting point to use the SDK. You need to create an instance and invoke methods from it. In most cases a
-single instance is sufficient, but in case you need more, you need to define
-[`options.storage.prefix`](#options.storage.prefix).
+This is the starting point to use the SDK.
 
 ```js
 import { Directus } from '@directus/sdk';
@@ -182,16 +180,47 @@ import { Directus } from '@directus/sdk';
 const directus = new Directus(url, init);
 ```
 
-- `url` [required] _String_ - A string pointing to your Directus instance. E.g. `https://admin.directus.io`
+After you've created the instance as shown, you can start invoking methods from it to access your Directus project.
 
-  <a name="options"></a>
+:::tip Multiple Instances
 
-- `init` [optional] _Object_ - Define settings that you want to customize .The possible options are:
+In most cases a single instance is sufficient, but in case you need more, you need to define
+[`options.storage.prefix`](#options.storage.prefix). See next section for details.
 
-  <a name="options.auth"></a>
+:::
 
-  - `auth` [optional] _Object_ - Defines settings you want to customize regarding [authentication](#auth). The possible
-    options are:
+### Options
+
+```js
+new Directus(url, {
+	auth: {
+		mode: String,
+		autoRefresh: String,
+		msRefreshBeforeExpires: String,
+		staticToken: String,
+	},
+	storage: {
+		prefix: String,
+		mode: String,
+ 	}.
+	transport: {
+		params: {},
+		headers: {},
+		headers: {},
+		onUploadProgress: () => {},
+		maxBodyLength: Num,
+		maxContentLength: {}
+	}
+});
+```
+
+As shown above, the constructor takes in two params, `url` and `init`.
+
+- `url` [required] _String_. A string pointing to your Directus instance. E.g. `https://example.directus.io`
+
+- `init` [optional] _Object_ - Defines settings that you want to customize.
+
+  - `auth` [optional] _Object_ - Defines [authentication](#auth) settins. The possible options are:
 
     - `mode` [optional] _String_ - Defines the mode you want to use for authentication. It can be `'cookie'` for cookies
       or `'json'` for JWT. Defaults to `'cookie'` on browsers and `'json'` otherwise. We recommend using cookies when
@@ -199,7 +228,7 @@ const directus = new Directus(url, init);
 
       <a name="options.auth.autoRefresh"></a>
 
-    - `autoRefresh` [optional] _Boolean_ - Tells SDK if it should handle refresh tokens automatically. Defaults to
+    - `autoRefresh` [optional] _Boolean_ - Determines whether SDK handles refresh tokens automatically. Defaults to
       `true`.
     - `msRefreshBeforeExpires` [optional] _Number_ - When `autoRefresh` is enabled, this tells how many milliseconds
       before the refresh token expires and needs to be refreshed. Defaults to `30000`.
