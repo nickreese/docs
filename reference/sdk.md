@@ -334,6 +334,7 @@ export default {
 
 - **Type** — `Object`
 - **Description** — Defines an object with keys and values to be passed as additional query string.
+- **Default** — N/A
 
 <br />
 
@@ -341,14 +342,16 @@ export default {
 
 - **Type** — `Object`
 - **Description** - Defines an object with keys and values to be passed as additional headers.
+- **Default** — N/A
 
 <br />
 
 #### `onUploadProgress`
 
 - **Type** — `Function`
-- **Description** — Defines a callback function to indicate the upload progress.
-- **Default** — _(event: [ProgressEvent](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent) => void)_
+- **Description** — Defines a callback function to indicate the upload progress. _(event:
+  [ProgressEvent](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent) => void)_
+- **Default** — N/A
 
 <br />
 
@@ -356,7 +359,7 @@ export default {
 
 - **Type** — `Number`
 - **Description** — The maximum body length in bytes. Set `Infinity` for no limit.
-- **Default** —
+- **Default** — N/A
 
 <br />
 
@@ -364,7 +367,7 @@ export default {
 
 - **Type** — `Number`
 - **Description** — The maximum content length in bytes. Set `Infinity` for no limit.
-- **Default** —
+- **Default** — N/A
 
 ### Extend `Transport`
 

@@ -345,3 +345,5 @@ slugification
 misconfigurations
 relationally-linked
 kanban
+config-options
+Cloudinary's
