@@ -368,9 +368,9 @@ export default {
 
 ### Extend `Transport`
 
-It is possible to provide a custom implementation by extending `ITransport`. While this could be useful in certain
-advanced situations, it is not needed for most use-cases. For example, you can also customize `transport` to use
-different HTTP libraries.
+It is possible to provide a custom implementation by extending `ITransport`. For example, you can customize it to use
+different HTTP libraries. While this could be useful in certain advanced situations, it is not needed for most
+use-cases.
 
 ```js
 import { ITransport, Directus } from '@directus/sdk';
