@@ -122,9 +122,8 @@ const directus = new Directus(url, init);
 #### `init` _optional_
 
 - **Type** — `Object`
-- **Description** — Defines settings that you want to customize. Composed of `auth`, `storage`, and `transport`,
-  described below.
-- **Default** — By default, Directus will use the following default values for `init`
+- **Description** — Defines authentication, storage and transport settings.
+- **Default** — Directus will use the following default values for `init`.
 
 ```js
 // This is the default init object
@@ -143,8 +142,8 @@ export default {
 		params: {},
 		headers: {},
 		onUploadProgress: (ProgressEvent) => void,
-		maxBodyLength: Num,
-		maxContentLength: Num
+		maxBodyLength: null,
+		maxContentLength: null
 	}
 }
 ```
@@ -368,8 +367,6 @@ export default {
 - **Default** —
 
 ### Extend `Transport`
-
-The `Transport` object abstracts how you communicate with Directus.
 
 It is possible to provide a custom implementation by extending `ITransport`. While this could be useful in certain
 advanced situations, it is not needed for most use-cases. For example, you can also customize `transport` to use
