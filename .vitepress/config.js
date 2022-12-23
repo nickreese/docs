@@ -657,59 +657,12 @@ function sidebar() {
 					text: 'Config Options',
 				},
 				{
+					link: '/self-hosted/installation/docker',
+					text: 'Docker Guide',
+				},
+				{
 					link: '/self-hosted/sso',
 					text: 'Single Sign-On (SSO)',
-				},
-				// {
-				// 	type: 'page',
-				// 	link: '/self-hosted/sso-examples',
-				// 	text: 'SSO Examples',
-				// },
-				{
-					link: '/self-hosted/installation',
-					text: 'Installation',
-					items: [
-						{
-							link: '/self-hosted/installation/aws',
-							text: 'AWS',
-						},
-						{
-							link: '/self-hosted/installation/cloudron',
-							text: 'Cloudron',
-						},
-						{
-							link: '/self-hosted/installation/cli',
-							text: 'CLI',
-						},
-						{
-							link: '/self-hosted/installation/digitalocean-app-platform',
-							text: 'DigitalOcean',
-						},
-						{
-							link: '/self-hosted/installation/docker',
-							text: 'Docker',
-						},
-						{
-							link: '/self-hosted/installation/gcp',
-							text: 'Google Cloud Platform',
-						},
-						{
-							link: '/self-hosted/installation/iis',
-							text: 'IIS',
-						},
-						{
-							link: '/self-hosted/installation/manual',
-							text: 'Manual',
-						},
-						{
-							link: '/self-hosted/installation/plesk',
-							text: 'Plesk',
-						},
-						{
-							link: '/self-hosted/installation/ubuntu',
-							text: 'Ubuntu',
-						},
-					],
 				},
 				{
 					type: 'page',

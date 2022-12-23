@@ -293,6 +293,7 @@ All the `DB_POOL__` prefixed options are passed to [`tarn.js`](https://github.co
 | `CONTENT_SECURITY_POLICY_*`      | Custom overrides for the Content-Security-Policy header. See [helmet's documentation](https://helmetjs.github.io) for more information.                          | --                       |
 | `HSTS_ENABLED`                   | Enable the Strict-Transport-Security policy header.                                                                                                              | `false`                  |
 | `HSTS_*`                         | Custom overrides for the Strict-Transport-Security header. See [helmet's documentation](https://helmetjs.github.io) for more information.                        | --                       |
+| `FLOWS_EXEC_ALLOWED_MODULES`     | CSV allowlist of node modules that are allowed to be used in the _run script_ operation in flows                                                                 | --                       |
 
 ::: tip Cookie Strictness
 
@@ -339,6 +340,13 @@ multiplied. This may cause out of memory errors, especially when running in cont
 | `CORS_EXPOSED_HEADERS` | Value for the `Access-Control-Expose-Headers` header.                                                                                                  | `Content-Range`              |
 | `CORS_CREDENTIALS`     | Whether or not to send the `Access-Control-Allow-Credentials` header.                                                                                  | `true`                       |
 | `CORS_MAX_AGE`         | Value for the `Access-Control-Max-Age` header.                                                                                                         | `18000`                      |
+
+:::tip More Details
+
+For more details about each configuration variable, please see the
+[CORS package documentation](https://www.npmjs.com/package/cors#configuration-options).
+
+:::
 
 ## Rate Limiting
 
@@ -504,10 +512,10 @@ Alternatively, you can provide the individual connection parameters:
 ## File Storage
 
 By default, Directus stores all uploaded files locally on disk. However, you can also configure Directus to use S3,
-Google Cloud Storage, or Azure. You can also configure _multiple_ storage adapters at the same time. This allows you to
-choose where files are being uploaded on a file-by-file basis. In the Admin App, files will automatically be uploaded to
-the first configured storage location (in this case `local`). The used storage location is saved under `storage` in
-`directus_files`.
+Google Cloud Storage, Azure, or Cloudinary. You can also configure _multiple_ storage adapters at the same time. This
+allows you to choose where files are being uploaded on a file-by-file basis. In the Admin App, files will automatically
+be uploaded to the first configured storage location (in this case `local`). The used storage location is saved under
+`storage` in `directus_files`.
 
 ::: tip File Storage Default
 
@@ -545,11 +553,11 @@ STORAGE_S3_DRIVER="s3" # Will work, "s3" is uppercased ✅
 
 For each of the storage locations listed, you must provide the following configuration:
 
-| Variable                                   | Description                                               | Default Value |
-| ------------------------------------------ | --------------------------------------------------------- | ------------- |
-| `STORAGE_<LOCATION>_DRIVER`                | Which driver to use, either `local`, `s3`, `gcs`, `azure` |               |
-| `STORAGE_<LOCATION>_ROOT`                  | Where to store the files on disk                          | `''`          |
-| `STORAGE_<LOCATION>_HEALTHCHECK_THRESHOLD` | Healthcheck timeout threshold in ms.                      | `750`         |
+| Variable                                   | Description                                                             | Default Value |
+| ------------------------------------------ | ----------------------------------------------------------------------- | ------------- |
+| `STORAGE_<LOCATION>_DRIVER`                | Which driver to use, either `local`, `s3`, `gcs`, `azure`, `cloudinary` |               |
+| `STORAGE_<LOCATION>_ROOT`                  | Where to store the files on disk                                        | `''`          |
+| `STORAGE_<LOCATION>_HEALTHCHECK_THRESHOLD` | Healthcheck timeout threshold in ms.                                    | `750`         |
 
 Based on your configured driver, you must also provide the following configurations:
 
@@ -573,11 +581,11 @@ Based on your configured driver, you must also provide the following configurati
 
 ### Azure (`azure`)
 
-| Variable                            | Description                | Default Value                                 |
-| ----------------------------------- | -------------------------- | --------------------------------------------- |
-| `STORAGE_<LOCATION>_CONTAINER_NAME` | Azure Storage container    | --                                            |
-| `STORAGE_<LOCATION>_ACCOUNT_NAME`   | Azure Storage account name | --                                            |
-| `STORAGE_<LOCATION>_ACCOUNT_KEY`    | Azure Storage key          | --                                            |
+| Variable                            | Description                | Default Value                                  |
+| ----------------------------------- | -------------------------- | ---------------------------------------------- |
+| `STORAGE_<LOCATION>_CONTAINER_NAME` | Azure Storage container    | --                                             |
+| `STORAGE_<LOCATION>_ACCOUNT_NAME`   | Azure Storage account name | --                                             |
+| `STORAGE_<LOCATION>_ACCOUNT_KEY`    | Azure Storage key          | --                                             |
 | `STORAGE_<LOCATION>_ENDPOINT`       | Azure URL                  | `https://{ACCOUNT_NAME}.blob.core.windows.net` |
 
 ### Google Cloud Storage (`gcs`)
@@ -586,6 +594,29 @@ Based on your configured driver, you must also provide the following configurati
 | --------------------------------- | --------------------------- | ------------- |
 | `STORAGE_<LOCATION>_KEY_FILENAME` | Path to key file on disk    | --            |
 | `STORAGE_<LOCATION>_BUCKET`       | Google Cloud Storage bucket | --            |
+
+    cloudName: string;
+    apiKey: string;
+    apiSecret: string;
+    accessMode: 'public' | 'authenticated';
+
+};
+
+### Cloudinary (`cloudinary`)
+
+| Variable                         | Description                                                         | Default Value |
+| -------------------------------- | ------------------------------------------------------------------- | ------------- |
+| `STORAGE_<LOCATION>_CLOUD_NAME`  | Cloudinary Cloud Name                                               | --            |
+| `STORAGE_<LOCATION>_API_KEY`     | Cloudinary API Key                                                  | --            |
+| `STORAGE_<LOCATION>_API_SECRET`  | Cloudinary API Secret                                               | --            |
+| `STORAGE_<LOCATION>_ACCESS_MODE` | Default access mode for the file. One of `public`, `authenticated`. | --            |
+
+::: warning One-way sync
+
+Cloudinary is supported as a _storage_ driver. Changes made on Cloudinary are _not_ synced back to Directus, and
+Directus _won't_ rely on Cloudinary's asset transformations in the `/assets` endpoint.
+
+:::
 
 ### Example: Multiple Storage Adapters
 
@@ -616,13 +647,14 @@ purposes, collection of additional metadata must be configured:
 
 ## Assets
 
-| Variable                               | Description                                                                                                                             | Default Value |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `ASSETS_CACHE_TTL`                     | How long assets will be cached for in the browser. Sets the `max-age` value of the `Cache-Control` header.                              | `30d`         |
-| `ASSETS_TRANSFORM_MAX_CONCURRENT`      | How many file transformations can be done simultaneously                                                                                | `4`           |
-| `ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION` | The max pixel dimensions size (width/height) that is allowed to be transformed                                                          | `6000`        |
-| `ASSETS_TRANSFORM_MAX_OPERATIONS`      | The max number of transform operations that is allowed to be processed (excludes saved presets)                                         | `5`           |
-| `ASSETS_CONTENT_SECURITY_POLICY`       | Custom overrides for the Content-Security-Policy header. See [helmet's documentation](https://helmetjs.github.io) for more information. | --            |
+| Variable                                 | Description                                                                                                                             | Default Value |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `ASSETS_CACHE_TTL`                       | How long assets will be cached for in the browser. Sets the `max-age` value of the `Cache-Control` header.                              | `30d`         |
+| `ASSETS_TRANSFORM_MAX_CONCURRENT`        | How many file transformations can be done simultaneously                                                                                | `4`           |
+| `ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION`   | The max pixel dimensions size (width/height) that is allowed to be transformed                                                          | `6000`        |
+| `ASSETS_TRANSFORM_MAX_OPERATIONS`        | The max number of transform operations that is allowed to be processed (excludes saved presets)                                         | `5`           |
+| `ASSETS_CONTENT_SECURITY_POLICY`         | Custom overrides for the Content-Security-Policy header. See [helmet's documentation](https://helmetjs.github.io) for more information. | --            |
+| `ASSETS_INVALID_IMAGE_SENSITIVITY_LEVEL` | Level of sensitivity to invalid images. See the [`sharp.failOn`](https://sharp.pixelplumbing.com/api-constructor#parameters) option     | `warning`     |
 
 Image transformations can be fairly heavy on memory usage. If you're using a system with 1GB or less available memory,
 we recommend lowering the allowed concurrent transformations to prevent you from overflowing your server.

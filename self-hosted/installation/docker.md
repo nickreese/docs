@@ -3,7 +3,7 @@ description: How to host Directus on Docker.
 readTime: 3 min read
 ---
 
-# Installing With Docker
+# Docker Guide
 
 Directus is published to both [Docker Hub](https://hub.docker.com/r/directus/directus) and
 [GitHub Packages](https://github.com/directus/directus/pkgs/container/directus) under `directus/directus`. To use the

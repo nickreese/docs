@@ -10,77 +10,44 @@ readTime: 5 min read
 > If you're looking for the fastest way to get up-and-running with Directus, this guide will walk you through getting
 > things installed, configured, and modeled.
 
+## Requirements
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/) (often included with newer Docker installations)
+
 ## 1. Installation
 
-Make sure you have the latest LTS version or newer of [Node.js](https://nodejs.dev) installed, and have a running
-database ready to connect to.
+You can use the following configuration to get started using Docker Compose. Make sure to change all sensitive values
+like `KEY`, `SECRET`, `ADMIN_PASSWORD`, _etc._
 
-Run the following command in your terminal and follow the prompts.
+```yaml
+version: '3'
+services:
+  directus:
+    image: directus/directus:latest
+    volumes:
+      - ./uploads:/directus/uploads
+      - ./database:/directus/database
+    environment:
+      KEY: '255d861b-5ea1-5996-9aa3-922530ec40b1'
+      SECRET: '6116487b-cda1-52c2-b5b5-c8022c45e263'
 
-```bash
-npm init directus-project example-project
+      DB_CLIENT: 'sqlite3'
+      DB_FILENAME: './data.db'
+
+      ADMIN_EMAIL: 'admin@example.com'
+      ADMIN_PASSWORD: 'd1r3ctu5'
 ```
 
-Choose SQLite from the list. Use up/down arrow keys to select the SQL type.
-
-```bash
-? Choose your database client SQLite
-```
-
-After that a file path for `data.db`, your database, will be suggested. Hit the enter key to stick with the default
-path.
-
-```bash
-? Database File Path: <file-path>/example-project/data.db
-```
-
-Next you'll set your username/email and password.
-
-```bash
-Create your first admin user:
-? Email: admin@example.com
-? Password: ********
-```
-
-After that, you're all set!
+Save this in your project as a file named `docker-compose.yml` and run:
 
 ```
-Your project has been created at <file-path>/example-project.
-
-The configuration can be found in <file-path>/example-project/.env
+docker-compose up -d
 ```
 
-Once the installation is complete, you can start Directus by navigating to your project folder _(in this case
-`example-project`)_ and running:
+::: tip More Info on Docker
 
-```bash
-npx directus start
-```
-
-After that, you will see this message:
-
-```bash
-✨ Server started at http://localhost:8055
-```
-
-#### Other Options
-
-When you link other types of SQL to Directus, you may have additional prompts:
-
-- **Database Host** – IP address for your database.
-- **Port** – Port number your database is running on.
-- **Database Name** – Name of your existing database.
-- **Database User** – Name of existing user in database.
-- **Database Password** – Password to enter database.
-- **Enable SSL** – Select `Y` for yes or `N` for no.
-- **Root** – Provide the root name.
-
-Simply configure these according to your project's needs.
-
-::: warning Directus seeds your database
-
-Directus installs a few dozen tables into the database it is linked to. However, this will not alter the pre-existing
-data tables.
+To learn more, visit the [Docker Guide](/self-hosted/installation/docker).
 
 :::
 

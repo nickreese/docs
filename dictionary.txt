@@ -6,6 +6,7 @@
 (B|b)alancer
 (B|b)asemap
 (C|c)harset
+(C|c)loudinary
 (C|c)odebase
 (C|c)onfigs?
 (C|c)ustomizable

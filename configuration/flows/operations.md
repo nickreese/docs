@@ -118,6 +118,13 @@ will cancel the original event transaction to the database.
 
 :::
 
+:::tip Node Modules
+
+For security reasons, module usage is disabled by default. You can configure what Node Modules are available through
+(the `FLOWS_EXEC_ALLOWED_MODULES` environment variable)[/self-hosted/config-options#security].
+
+:::
+
 ## Create Data
 
 ![Create Data](https://cdn.directus.io/docs/v9/configuration/flows/operations/operations-20220603A/create-data-20220603A.webp)

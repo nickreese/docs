@@ -1,6 +1,6 @@
 {
 	"name": "@directus/docs",
-	"version": "9.21.2",
+	"version": "9.22.0",
 	"main": "dist/index.js",
 	"exports": {
 		".": "./dist/index.js",
@@ -22,6 +22,7 @@
 		"@thumbsmith/url": "^0.1.2",
 		"@vueuse/head": "^0.7.8",
 		"directory-tree": "^3.3.0",
+		"fs-extra": "11.1.0",
 		"lint-staged": "^13.0.3",
 		"prettier": "2.7.1",
 		"reading-time": "^1.5.0",
