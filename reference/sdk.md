@@ -35,13 +35,12 @@ You can always access data available to the [public role](/configuration/users-r
 
 ```js
 async function publicData() {
-	// We don't need to authenticate if the public role has access.
-	const publicData = await directus.items('some_public_collection').readByQuery({ meta: 'total_count' });
+	// GET DATA
 
-	console.log({
-		items: publicData.data,
-		total: publicData.meta.total_count,
-	});
+	// We don't need to authenticate if the public role has access to some_public_collection.
+	const publicData = await directus.items('some_public_collection').readByQuery({ sort: ['id'] });
+
+	console.log(publicData.data);
 }
 ```
 
@@ -82,13 +81,10 @@ async function start() {
 
 	// GET DATA
 
-	// After authentication, we can fetch data that the user has access to.
-	const privateData = await directus.items('some_private_collection').readByQuery({ meta: 'total_count' });
+	// After authentication, we can fetch data from any collections that the user has permissions to.
+	const privateData = await directus.items('some_private_collection').readByQuery({ sort: ['id'] });
 
-	console.log({
-		items: privateData.data,
-		total: privateData.meta.total_count,
-	});
+	console.log(publicData.data);
 }
 
 start();
@@ -123,29 +119,29 @@ const directus = new Directus(url, init);
 
 - **Type** — `Object`
 - **Description** — Defines authentication, storage and transport settings.
-- **Default** — Directus will use the following default values for `init`.
+- **Default** — The following shows the default values for `init`.
 
 ```js
 // This is the default init object
-export default {
+const config = {
 	auth: {
-		mode: typeof window === 'undefined'? 'json': 'cookie',
+		mode: 'cookie', // 'json' in Node.js
 		autoRefresh: true,
 		msRefreshBeforeExpires: 30000,
 		staticToken: '',
 	},
 	storage: {
 		prefix: '',
-		mode: typeof window == 'undefined' ?  'MemoryStorage': 'LocalStorage'
+		mode: 'LocalStorage', // 'MemoryStorage' in Node.js
 	},
 	transport: {
 		params: {},
 		headers: {},
-		onUploadProgress: (ProgressEvent) => void,
+		onUploadProgress: (ProgressEvent) => {},
 		maxBodyLength: null,
-		maxContentLength: null
-	}
-}
+		maxContentLength: null,
+	},
+};
 ```
 
 ## `auth`
@@ -154,8 +150,8 @@ Defines how authentication is handled by the SDK. By default, Directus creates a
 refresh tokens automatically.
 
 ```js
-export default {
-	mode: typeof window === 'undefined' ? 'json' : 'cookie',
+const auth = {
+	mode: 'cookie', // 'json' in Node.js
 	autoRefresh: true,
 	msRefreshBeforeExpires: 30000,
 	staticToken: '',
@@ -224,7 +220,7 @@ class MyAuth extends IAuth {
 	}
 }
 
-const directus = new Directus('http://directus.example.com', {
+const directus = new Directus('https://example.directus.app', {
 	auth: new MyAuth(),
 });
 ```
@@ -235,9 +231,9 @@ The storage is used to load and save token information. By default, Directus cre
 handles store information automatically.
 
 ```js
-export default {
+const storage = {
 	prefix: '',
-	mode: typeof window === 'undefined' ? 'MemoryStorage' : 'LocalStorage',
+	mode: 'LocalStorage', // 'MemoryStorage' in Node.js
 };
 ```
 
@@ -300,7 +296,7 @@ class SessionStorage extends BaseStorage {
 	}
 }
 
-const directus = new Directus('http://directus.example.com', {
+const directus = new Directus('https://example.directus.app', {
 	storage: new SessionStorage(),
 });
 ```
@@ -320,7 +316,7 @@ The configurations within `init.transport` are passed to `axios`. For more detai
 export default {
 	params: {},
 	headers: {},
-	onUploadProgress: () => {},
+	onUploadProgress: (ProgressEvent) => {},,
 	maxBodyLength: null,
 	maxContentLength: null,
 };
@@ -349,9 +345,13 @@ export default {
 #### `onUploadProgress`
 
 - **Type** — `Function`
-- **Description** — Defines a callback function to indicate the upload progress. _(event:
-  [ProgressEvent](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent) => void)_
+- **Description** — Defines a callback function to indicate the upload progress.
 - **Default** — N/A
+
+:::tip ProgressEvent Please see the MDN documentation to learn more about the
+[ProgressEvent](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent).
+
+:::
 
 <br />
 
@@ -411,7 +411,7 @@ class MyTransport extends ITransport {
 	}
 }
 
-const directus = new Directus('http://directus.example.com', {
+const directus = new Directus('https://example.directus.app', {
 	transport: new MyTransport(),
 });
 ```
@@ -420,7 +420,7 @@ const directus = new Directus('http://directus.example.com', {
 
 Version >= 4.1
 
-Although it's not required, it is recommended to use Typescript to have an easy development experience. This allows more
+Although it's not required, it is recommended to use TypeScript to have an easy development experience. This allows more
 detailed IDE suggestions for return types, sorting, filtering, etc.
 
 To feed the SDK with your current schema, you need to pass it on the constructor.
@@ -441,7 +441,7 @@ type MyCollections = {
 };
 
 // This is how you feed custom type information to Directus.
-const directus = new Directus<MyCollections>('http://url');
+const directus = new Directus<MyCollections>('https://example.directus.app');
 
 // ...
 
@@ -473,7 +473,7 @@ type CustomTypes = {
 	directus_users: UserType;
 };
 
-const directus = new Directus<CustomTypes>('https://api.example.com');
+const directus = new Directus<CustomTypes>('https://example.directus.app');
 
 await directus.auth.login({
 	email: 'admin@example.com',
@@ -586,7 +586,7 @@ You can get an instance of the item handler by providing the collection (and typ
 // import { Directus, ID } from '@directus/sdk';
 const { Directus } = require('@directus/sdk');
 
-const directus = new Directus('http://directus.example.com');
+const directus = new Directus('https://example.directus.app');
 
 const articles = directus.items('articles');
 ```
@@ -619,7 +619,7 @@ type MyBlog = {
 };
 
 // Let the SDK know about your collection types.
-const directus = new Directus<MyBlog>('https://directus.myblog.com');
+const directus = new Directus<MyBlog>('https://example.directus.app');
 
 // typeof(article) is a partial "Article"
 const article = await directus.items('articles').readOne(10);
@@ -821,13 +821,14 @@ To upload a file you will need to send a `multipart/form-data` as body. On brows
 /* index.js */
 import { Directus } from 'https://unpkg.com/@directus/sdk@latest/dist/sdk.esm.min.js';
 
-const directus = new Directus('http://localhost:8055', {
+const directus = new Directus('https://example.directus.app', {
 	auth: {
 		staticToken: 'STATIC_TOKEN', // If you want to use a static token, otherwise check below how you can use email and password.
 	},
 });
 
-// await directus.auth.login({ email, password }) // If you want to use email and password. You should remove the staticToken above
+// await directus.auth.login({ email, password })
+// If you want to use email and password, remove the staticToken above.
 
 const form = document.querySelector('#upload-file');
 
@@ -863,7 +864,7 @@ set:
 ```js
 import { Directus } from 'https://unpkg.com/@directus/sdk@latest/dist/sdk.esm.min.js';
 
-const directus = new Directus('http://localhost:8055', {
+const directus = new Directus('https://example.directus.app', {
 	auth: {
 		staticToken: 'STATIC_TOKEN', // If you want to use a static token, otherwise check below how you can use email and password.
 	},
