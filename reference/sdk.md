@@ -316,7 +316,7 @@ The configurations within `init.transport` are passed to `axios`. For more detai
 export default {
 	params: {},
 	headers: {},
-	onUploadProgress: (ProgressEvent) => {},,
+	onUploadProgress: (ProgressEvent) => {},
 	maxBodyLength: null,
 	maxContentLength: null,
 };
