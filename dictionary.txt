@@ -81,6 +81,7 @@ cardinality
 CDNs?
 CLI
 CloudFront
+Cloudinary's
 Cloudron
 CloudSQL
 CMS
