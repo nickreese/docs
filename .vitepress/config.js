@@ -657,7 +657,7 @@ function sidebar() {
 					text: 'Config Options',
 				},
 				{
-					link: '/self-hosted/installation/docker',
+					link: '/self-hosted/docker-guide',
 					text: 'Docker Guide',
 				},
 				{

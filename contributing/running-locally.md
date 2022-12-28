@@ -9,7 +9,7 @@ readTime: 4 min read
 
 > This guide explains how to install the _Development_ version of Directus locally so that you can work on the
 > platform's source code. To install the _Production_ version locally, please follow to our
-> [standard installation guides](/self-hosted/installation).
+> [Docker Guide](/self-hosted/docker-guide).
 
 ::: tip Minimum Requirements
 

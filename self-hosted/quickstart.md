@@ -47,7 +47,7 @@ docker-compose up -d
 
 ::: tip More Info on Docker
 
-To learn more, visit the [Docker Guide](/self-hosted/installation/docker).
+To learn more, visit the [Docker Guide](/self-hosted/docker-guide).
 
 :::
 

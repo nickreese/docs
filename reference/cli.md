@@ -33,9 +33,7 @@ Will use an existing `.env` file (or existing environment variables) to either i
 migrate it to the latest version (if it already exists and has missing migrations).
 
 This is very useful to use in environments where you're doing standalone automatic deployments, like a multi-container
-Kubernetes configuration, or a similar approach on
-[DigitalOcean App Platform](/self-hosted/installation/digitalocean-app-platform),
-[Google Cloud Platform](/self-hosted/installation/gcp) or [AWS Elastic Beanstalk](/self-hosted/installation/aws)
+Kubernetes configuration.
 
 ::: tip First User
 

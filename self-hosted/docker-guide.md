@@ -156,6 +156,24 @@ started you will be on the latest version (or the version you specified).
 The Directus Docker Image contains all optional dependencies supported in the API. This means the Docker image can be
 used with most of the supported databases and storage adapters without having to create a custom image.
 
+To run Directus, you currently need one of the following databases:
+
+| Database                              | Version     |
+| ------------------------------------- | ----------- |
+| PostgreSQL                            | 10+         |
+| MySQL <sup>[1]</sup>                  | 5.7.8+ / 8+ |
+| SQLite                                | 3+          |
+| MS SQL Server                         | 13+         |
+| MariaDB <sup>[2]</sup>                | 10.2.7+     |
+| CockroachDB <sup>[2]</sup>            | 21.1.13+    |
+| OracleDB<sup>[2]</sup> <sup>[3]</sup> | 19+         |
+
+<sup>[1]</sup> MySQL 8+ requires
+[mysql_native_password](https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password-compatible-connectors)
+to be enabled\
+<sup>[2]</sup> Older versions may work, but aren't officially supported. Use at your own risk. \
+<sup>[3]</sup> Make sure to install `node-oracledb` and it's system dependencies when using OracleDB
+
 ::: warning OracleDB
 
 OracleDB's Node client (`node-oracledb`) requires a couple more native dependencies, and specific configurations in
