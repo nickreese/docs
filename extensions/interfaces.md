@@ -95,6 +95,7 @@ component, it should be emitted to the Directus App by using the `input` emit.
 #### Available Emits
 
 - `input` — Update the value of the field.
+- `setFieldValue` - Used to set the value of other fields. 
 
 Other than this simple API to communicate with the Directus App, the interface component is a blank canvas, allowing you
 to create anything you need.
